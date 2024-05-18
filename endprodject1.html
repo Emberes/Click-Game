@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Klicka Snabbt</title>
+    <style>
+      
+        body {
+            background: #0e5427;
+        }
+    *, ::after, ::before{
+        margin: 0;
+        padding: 0;
+    }
+    #grid {
+        display: none;
+        width: 322px;
+        height: 322px;
+        padding: 4px;
+        background-color: #30a358;
+        z-index: 1;
+        border: 10px solid #2d2727;
+        border-radius: 4%;
+        margin: 50px auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .square {
+        width: 100px;
+        height: 100px;
+        border: 2px solid #abcdab;
+        z-index: 1;
+        border-radius: 2%;
+        margin-bottom: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #startButton {
+        width: 120px;
+        height: 60px;
+        background-color: rgb(147, 100, 145);
+        border: #2d2727;
+        color: antiquewhite;
+        text-align: center;
+        cursor: pointer;
+        align-self: center;
+        margin: 50px auto;
+    }
+        </style>   
+</head>
+
+<body>
+    <h1>Klicka så snabbt du kan!</h1>
+    <h2><div id="score">Score: 0</div>
+    </h2>
+    <h3><div id="timer">0 seconds left</div></h3>
+
+    <div id="startButton"><br> Start Game!</div>
+
+    <div id="grid">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+    </div>
+
+    <div id="test"></div>
+
+
+    <script>
+
+        let seconds = 15; 
+        let score = 0;
+
+        let startGame = function(){
+            let startButton = document.getElementById("startButton");
+            startButton.addEventListener("click", function(){
+            document.querySelector('h2').innerHTML = ' Score: 0';
+            setInterval(seconds);
+            seconds = 15;
+            score = 0; 
+            createTarget();
+            let timer = setInterval(function() { 
+                document.querySelector('h3').innerHTML = seconds + ' seconds left'; 
+                seconds--;
+                
+                 if (seconds < 0) {
+                    clearInterval(seconds);
+                    document.querySelector('h3').innerHTML = '0 seconds left, Game over!';
+                    startButton.disabled = false;
+                    clearInterval(timer);
+                    }
+                }, 1000);
+            }
+         )
+    
+        }
+
+        startGame();
+
+        
+// functionen gör så att det scoret uppdateras 
+        function updateScore(){
+            let scores = document.getElementById("score");
+            score++;
+            document.querySelector('h2').innerHTML = ' Score: ' + score;
+          
+        }
+
+// skapar tagrgetet och flyttar den till en random plats i gridden samt gör den klickbar
+
+
+        function createTarget(){
+            let squares = document.getElementsByClassName("square");
+            let randomGridSquare = Math.floor(Math.random() * squares.length);
+            let clickMe = document.createElement("target");
+            clickMe.style.height = "100px";
+            clickMe.style.width = "100px";
+            clickMe.style.background = "black";
+            squares[randomGridSquare].appendChild(clickMe);
+            console.log(squares[randomGridSquare]);
+            clickMe.addEventListener("click", function() {
+                clickMe.remove();
+                updateScore();
+                createTarget();
+            });
+            if(seconds <= 0){
+                clickMe.remove();
+                
+            }
+        }
+
+        
+    </script>
+    
+</body>
+</html>
